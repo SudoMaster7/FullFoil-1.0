@@ -1,0 +1,124 @@
+.card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.info-section {
+    background: var(--bg-secondary);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+}
+
+.info-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.card-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    padding: 0.5rem;
+    background: var(--bg-primary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--accent-primary);
+}
+
+.flavor-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    padding: 0.75rem;
+    font-style: italic;
+    border-left: 2px solid var(--text-secondary);
+}
+
+.legality-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.legality-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-primary);
+    border-radius: 0.5rem;
+}
+
+.format-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: var(--text-primary);
+}
+
+.legality-status {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+}
+
+.legality-status.legal {
+    color: var(--success);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.legality-status.banned,
+.legality-status.restricted {
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.legal-icon {
+    flex-shrink: 0;
+}
+
+.legal-icon.legal {
+    color: var(--success);
+}
+
+.legal-icon.banned {
+    color: var(--danger);
+}
+
+@media (max-width: 576px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}

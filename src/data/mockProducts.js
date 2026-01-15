@@ -1,0 +1,223 @@
+// Mock products with filterable properties
+export const MOCK_PRODUCTS = [
+    {
+        id: 1,
+        name: 'Black Lotus',
+        game: 'magic',
+        set: 'Alpha',
+        condition: 'NM',
+        rarity: 'Rare',
+        price: 45000,
+        colors: [],
+        type: 'Artefato',
+        image: '/card1.jpg'
+    },
+    {
+        id: 2,
+        name: 'Charizard',
+        game: 'pokemon',
+        set: 'Base Set',
+        condition: 'NM',
+        rarity: 'Holo Rare',
+        price: 150,
+        colors: [],
+        type: 'Fogo',
+        image: '/card2.jpg'
+    },
+    {
+        id: 3,
+        name: 'Sol Ring',
+        game: 'magic',
+        set: 'Foundations',
+        condition: 'NM',
+        rarity: 'Uncommon',
+        price: 1.99,
+        colors: [],
+        type: 'Artefato',
+        image: '/card3.jpg'
+    },
+    {
+        id: 4,
+        name: 'Lightning Bolt',
+        game: 'magic',
+        set: 'Alpha',
+        condition: 'LP',
+        rarity: 'Common',
+        price: 65.50,
+        colors: ['R'],
+        type: 'Instantânea',
+        image: '/card4.jpg'
+    },
+    {
+        id: 5,
+        name: 'Blue-Eyes White Dragon',
+        game: 'yugioh',
+        set: 'Legend of Blue Eyes',
+        condition: 'NM',
+        rarity: 'Ultra Rare',
+        price: 120,
+        colors: [],
+        type: 'Dragão',
+        image: '/card1.jpg'
+    },
+    {
+        id: 6,
+        name: 'Tarmogoyf',
+        game: 'magic',
+        set: 'Modern Horizons',
+        condition: 'NM',
+        rarity: 'Mythic',
+        price: 45,
+        colors: ['G'],
+        type: 'Criatura',
+        image: '/card2.jpg'
+    },
+    {
+        id: 7,
+        name: 'Pikachu',
+        game: 'pokemon',
+        set: 'Base Set',
+        condition: 'MP',
+        rarity: 'Common',
+        price: 5,
+        colors: [],
+        type: 'Elétrico',
+        image: '/card3.jpg'
+    },
+    {
+        id: 8,
+        name: 'Jace, the Mind Sculptor',
+        game: 'magic',
+        set: 'Worldwake',
+        condition: 'NM',
+        rarity: 'Mythic',
+        price: 120,
+        colors: ['U'],
+        type: 'Planeswalker',
+        image: '/card4.jpg'
+    },
+    {
+        id: 9,
+        name: 'Counterspell',
+        game: 'magic',
+        set: 'Foundation',
+        condition: 'NM',
+        rarity: 'Common',
+        price: 0.50,
+        colors: ['U'],
+        type: 'Instantânea',
+        image: '/card1.jpg'
+    },
+    {
+        id: 10,
+        name: 'Mew',
+        game: 'pokemon',
+        set: 'Legends Awakened',
+        condition: 'NM',
+        rarity: 'Holo Rare',
+        price: 25,
+        colors: [],
+        type: 'Psíquico',
+        image: '/card2.jpg'
+    },
+    {
+        id: 11,
+        name: 'Force of Will',
+        game: 'magic',
+        set: 'Alliances',
+        condition: 'LP',
+        rarity: 'Uncommon',
+        price: 95,
+        colors: ['U'],
+        type: 'Instantânea',
+        image: '/card3.jpg'
+    },
+    {
+        id: 12,
+        name: 'Thoughtseize',
+        game: 'magic',
+        set: 'Theros',
+        condition: 'NM',
+        rarity: 'Rare',
+        price: 18,
+        colors: ['B'],
+        type: 'Feitiço',
+        image: '/card4.jpg'
+    },
+    {
+        id: 13,
+        name: 'Path to Exile',
+        game: 'magic',
+        set: 'Conflux',
+        condition: 'NM',
+        rarity: 'Uncommon',
+        price: 3.50,
+        colors: ['W'],
+        type: 'Instantânea',
+        image: '/card1.jpg'
+    },
+    {
+        id: 14,
+        name: 'Swords to Plowshares',
+        game: 'magic',
+        set: 'Ice Age',
+        condition: 'HP',
+        rarity: 'Common',
+        price: 1.25,
+        colors: ['W'],
+        type: 'Instantânea',
+        image: '/card2.jpg'
+    },
+    {
+        id: 15,
+        name: 'Dark Magician',
+        game: 'yugioh',
+        set: 'Legend of Blue Eyes',
+        condition: 'NM',
+        rarity: 'Ultra Rare',
+        price: 85,
+        colors: [],
+        type: 'Mago',
+        image: '/card3.jpg'
+    },
+];
+
+// Filter options
+export const FILTER_OPTIONS = {
+    condition: [
+        { value: 'NM', label: 'Near Mint (NM)' },
+        { value: 'LP', label: 'Lightly Played (LP)' },
+        { value: 'MP', label: 'Moderately Played (MP)' },
+        { value: 'HP', label: 'Heavily Played (HP)' },
+        { value: 'DMG', label: 'Damaged (DMG)' },
+    ],
+    rarity: {
+        magic: [
+            { value: 'Common', label: 'Common' },
+            { value: 'Uncommon', label: 'Uncommon' },
+            { value: 'Rare', label: 'Rare' },
+            { value: 'Mythic', label: 'Mythic Rare' },
+        ],
+        pokemon: [
+            { value: 'Common', label: 'Common' },
+            { value: 'Uncommon', label: 'Uncommon' },
+            { value: 'Rare', label: 'Rare' },
+            { value: 'Holo Rare', label: 'Holo Rare' },
+            { value: 'Ultra Rare', label: 'Ultra Rare' },
+        ],
+        yugioh: [
+            { value: 'Common', label: 'Common' },
+            { value: 'Rare', label: 'Rare' },
+            { value: 'Super Rare', label: 'Super Rare' },
+            { value: 'Ultra Rare', label: 'Ultra Rare' },
+            { value: 'Secret Rare', label: 'Secret Rare' },
+        ],
+    },
+    colors: [
+        { value: 'W', label: 'Branco', color: '#F0E68C' },
+        { value: 'U', label: 'Azul', color: '#0E68AB' },
+        { value: 'B', label: 'Preto', color: '#150B00' },
+        { value: 'R', label: 'Vermelho', color: '#D3202A' },
+        { value: 'G', label: 'Verde', color: '#00733E' },
+    ],
+};

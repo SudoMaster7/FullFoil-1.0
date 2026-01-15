@@ -1,0 +1,179 @@
+.marketplace-listings {
+    background: var(--bg-secondary);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.listings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.listings-count {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.listings-sort {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.listings-sort label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.listings-sort select {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.listings-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.listings-table-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 140px;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-primary);
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.listing-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 140px;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-color);
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.listing-row:hover {
+    border-color: var(--accent-primary);
+    transform: translateX(4px);
+}
+
+.seller-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.seller-name {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.certified-badge {
+    background: var(--accent-primary);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+}
+
+.seller-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.star-icon {
+    color: #fbbf24;
+}
+
+.sales-count {
+    font-size: 0.8rem;
+}
+
+.condition-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--accent-primary);
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.quantity-text {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    display: block;
+}
+
+.listing-price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+.shipping-time {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .listings-table-header {
+        display: none;
+    }
+
+    .listing-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .col-seller,
+    .col-condition,
+    .col-price,
+    .col-shipping,
+    .col-action {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .col-seller::before,
+    .col-condition::before,
+    .col-price::before,
+    .col-shipping::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+    }
+}

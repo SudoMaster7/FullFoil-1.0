@@ -1,0 +1,58 @@
+/* Page transitions */
+.app-container main {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth route transitions */
+.catalog-page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.catalog-page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease-out;
+}
+
+.catalog-page-exit {
+  opacity: 1;
+}
+
+.catalog-page-exit-active {
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+}
+
+/* Error and loading states */
+.error-state {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.error-state p {
+  color: var(--color-error, #ef4444);
+  margin-bottom: 1rem;
+}
+
+.no-results {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.no-results p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}

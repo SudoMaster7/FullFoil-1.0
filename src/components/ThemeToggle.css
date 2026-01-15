@@ -1,0 +1,11 @@
+.theme-toggle {
+    transition: transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+    transform: rotate(20deg);
+}
+
+.theme-toggle:active {
+    transform: rotate(20deg) scale(0.95);
+}
