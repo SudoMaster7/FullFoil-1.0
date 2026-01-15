@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import cardImage from '../assets/card-fullfoil.png';
 import './Hero.css';
 
 const Hero = () => {
@@ -23,7 +24,7 @@ const Hero = () => {
                 <div className="hero-visual">
                     <div className="card-mockup glow-effect">
                         <div className="mockup-inner">
-                            <img src="src/assets/card-fullfoil.png" alt="carta de exemplo" />
+                            <img src={cardImage} alt="carta de exemplo" />
                         </div>
                     </div>
                     <div className="card-mockup secondary-card">
