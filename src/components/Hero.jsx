@@ -15,7 +15,10 @@ const Hero = () => {
                         Autenticidade verificada e proteção premium.
                     </p>
                     <div className="hero-cta">
-                        <button className="btn btn-primary">
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => window.location.hash = '#/magic'}
+                        >
                             Comprar Agora <ArrowRight size={18} style={{ marginLeft: '8px' }} />
                         </button>
                         <button className="btn btn-ghost">Vender Suas Cartas</button>

@@ -42,7 +42,7 @@ const MobileSidebar = ({ isOpen, onClose }) => {
                                         <ul>
                                             {game.sets.map((set, idx) => (
                                                 <li key={idx}>
-                                                    <a href={`#/game/${game.id}/set/${set.name}`} onClick={onClose}>
+                                                    <a href={`#/${game.id}/set/${set.name}`} onClick={onClose}>
                                                         {set.name}
                                                         {set.featured && <span className="new-badge">Novo</span>}
                                                     </a>
@@ -54,14 +54,14 @@ const MobileSidebar = ({ isOpen, onClose }) => {
                                     <div className="sidebar-section">
                                         <h4>Navegar</h4>
                                         <ul>
-                                            <li><a href={`#/game/${game.id}/singles`} onClick={onClose}>Cartas Avulsas</a></li>
-                                            <li><a href={`#/game/${game.id}/sealed`} onClick={onClose}>Produtos Lacrados</a></li>
-                                            <li><a href={`#/game/${game.id}/accessories`} onClick={onClose}>Acessórios</a></li>
+                                            <li><a href={`#/${game.id}/singles`} onClick={onClose}>Cartas Avulsas</a></li>
+                                            <li><a href={`#/${game.id}/sealed`} onClick={onClose}>Produtos Lacrados</a></li>
+                                            <li><a href={`#/${game.id}/accessories`} onClick={onClose}>Acessórios</a></li>
                                         </ul>
                                     </div>
 
                                     <a
-                                        href={`#/game/${game.id}`}
+                                        href={`#/${game.id}`}
                                         className="btn btn-primary sidebar-cta"
                                         style={{ backgroundColor: game.color }}
                                         onClick={onClose}
