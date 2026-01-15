@@ -33,7 +33,34 @@ FullFoil é um marketplace completo de Trading Card Games (TCG) inspirado no TCG
 - Navegação completa
 - Responsive design
 
+## 🔧 Configuração
+
+### Variáveis de Ambiente
+
+#### Frontend (.env)
+```bash
+VITE_API_URL=http://localhost:3001/api
+```
+
+Para produção na Vercel, configure:
+- `VITE_API_URL` → URL do seu backend (ex: `https://your-backend.vercel.app/api`)
+
+#### Backend (server/.env)
+```bash
+PORT=3001
+NODE_ENV=development
+FRONTEND_URL=http://localhost:5173
+```
+
+Para produção na Vercel, configure:
+- `NODE_ENV` → `production`
+- `FRONTEND_URL` → URL do seu frontend (ex: `https://full-foil-1-0.vercel.app`)
+
+> 📝 **Nota**: Exemplos de configuração estão nos arquivos `.env.example`
+
 ## 🚀 Deploy
+
+Para instruções completas de deploy, veja o [Guia de Deployment](./VERCEL_DEPLOYMENT_GUIDE.md).
 
 ### Frontend (Vercel)
 ```bash
@@ -45,11 +72,13 @@ cd tcg
 vercel
 ```
 
-### Backend (Vercel ou Railway)
+### Backend (Vercel)
 ```bash
 cd server
 vercel
 ```
+
+> ⚠️ **Importante**: Configure as variáveis de ambiente no dashboard da Vercel após o deploy inicial.
 
 ## 🛠️ Tecnologias
 
