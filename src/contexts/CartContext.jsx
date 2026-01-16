@@ -159,6 +159,8 @@ export const CartProvider = ({ children }) => {
 
     const value = {
         cart,
+        cartItems: cart.items, // Convenience property
+        totalAmount: cart.subtotal, // Convenience property
         isCartOpen,
         addToCart,
         removeFromCart,

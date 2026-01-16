@@ -1,9 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { getMySeller } from '../services/sellerService';
 import cardImage from '../assets/card-fullfoil.png';
 import './Hero.css';
 
 const Hero = () => {
+    const { isAuthenticated, token } = useAuth();
+    const [isSeller, setIsSeller] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (isAuthenticated && token) {
+            checkSellerStatus();
+        }
+    }, [isAuthenticated, token]);
+
+    const checkSellerStatus = async () => {
+        try {
+            setLoading(true);
+            const seller = await getMySeller(token);
+            setIsSeller(!!seller);
+        } catch (error) {
+            setIsSeller(false);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSellClick = () => {
+        if (!isAuthenticated) {
+            window.location.hash = '#/login';
+            return;
+        }
+
+        if (isSeller) {
+            window.location.hash = '#/create-listing';
+        } else {
+            window.location.hash = '#/become-seller';
+        }
+    };
+
+    const handleBuyClick = () => {
+        window.location.hash = '#/marketplace';
+    };
+
     return (
         <section className="hero">
             <div className="container hero-content">
@@ -17,11 +58,17 @@ const Hero = () => {
                     <div className="hero-cta">
                         <button
                             className="btn btn-primary"
-                            onClick={() => window.location.hash = '#/magic'}
+                            onClick={handleBuyClick}
                         >
                             Comprar Agora <ArrowRight size={18} style={{ marginLeft: '8px' }} />
                         </button>
-                        <button className="btn btn-ghost">Vender Suas Cartas</button>
+                        <button
+                            className="btn btn-ghost"
+                            onClick={handleSellClick}
+                            disabled={loading}
+                        >
+                            {loading ? 'Carregando...' : isSeller ? 'Criar Anúncio' : 'Vender Suas Cartas'}
+                        </button>
                     </div>
                 </div>
                 <div className="hero-visual">

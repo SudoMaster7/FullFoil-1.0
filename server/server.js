@@ -9,6 +9,11 @@ import yugiohRoutes from './routes/yugioh.js';
 import lorcanaRoutes from './routes/lorcana.js';
 import onepieceRoutes from './routes/onepiece.js';
 import fabRoutes from './routes/fab.js';
+import paymentRoutes from './routes/payment.js';
+import ordersRoutes from './routes/orders.js';
+import authRoutes from './routes/auth.js';
+import sellersRoutes from './routes/sellers.js';
+import listingsRoutes from './routes/listings.js';
 
 dotenv.config();
 
@@ -47,6 +52,11 @@ app.use('/api/yugioh', yugiohRoutes);
 app.use('/api/lorcana', lorcanaRoutes);
 app.use('/api/onepiece', onepieceRoutes);
 app.use('/api/fab', fabRoutes);
+app.use('/api/payment', paymentRoutes);
+app.use('/api/orders', ordersRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/sellers', sellersRoutes);
+app.use('/api/listings', listingsRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {

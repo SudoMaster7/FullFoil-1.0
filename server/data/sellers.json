@@ -1,0 +1,36 @@
+[
+    {
+        "id": "seller_demo_001",
+        "userId": "user_demo_001",
+        "businessName": "Cards Premium Shop",
+        "description": "Loja especializada em cartas raras de Magic e Pokemon",
+        "logo": null,
+        "rating": 4.8,
+        "totalSales": 156,
+        "totalReviews": 89,
+        "commission": 12.5,
+        "status": "active",
+        "settings": {
+            "minOrder": 0,
+            "shippingOptions": [],
+            "processingTime": "1-2 dias úteis",
+            "returnPolicy": "Aceita devoluções em até 7 dias"
+        },
+        "address": {
+            "zipCode": "01234-567",
+            "street": "Rua das Cartas, 123",
+            "number": "",
+            "complement": "",
+            "city": "São Paulo",
+            "state": "SP",
+            "country": "Brasil"
+        },
+        "stats": {
+            "activeListings": 5,
+            "soldItems": 156,
+            "totalRevenue": 12450.50
+        },
+        "createdAt": "2026-01-01T10:00:00.000Z",
+        "updatedAt": "2026-01-16T14:00:00.000Z"
+    }
+]

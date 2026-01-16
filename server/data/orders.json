@@ -1,0 +1,41 @@
+[
+  {
+    "id": "order_1768577122597_4iq8ony18",
+    "orderNumber": "ORD-20260116-546",
+    "userId": "user_1768568099897_qh5exp5a2",
+    "items": [
+      {
+        "cardId": "2593a6a6-dc21-4742-acb8-f7092931b1ce-NM-1768577033822",
+        "name": "Words of War",
+        "game": "magic",
+        "price": 0.49,
+        "quantity": 1,
+        "image": "https://cards.scryfall.io/small/front/2/5/2593a6a6-dc21-4742-acb8-f7092931b1ce.jpg?1562903864"
+      }
+    ],
+    "shipping": {
+      "fullName": "LEONARDO BRITO",
+      "email": "leo@gmail.com",
+      "phone": "21983388872",
+      "zipCode": "25010-090",
+      "address": "Avenida Doutor Manuel Teles, 648",
+      "city": "Duque de Caxias",
+      "state": "RJ",
+      "country": "Brasil"
+    },
+    "payment": {
+      "method": "card",
+      "stripePaymentIntentId": "pi_3SqEtqRyBh3FIZvo0A6avrC0",
+      "status": "succeeded"
+    },
+    "totals": {
+      "subtotal": 0.49,
+      "shipping": 15,
+      "tax": 0.049,
+      "total": 15.539
+    },
+    "status": "pending",
+    "createdAt": "2026-01-16T15:25:22.597Z",
+    "updatedAt": "2026-01-16T15:25:22.597Z"
+  }
+]

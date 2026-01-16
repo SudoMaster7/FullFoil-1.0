@@ -1,0 +1,247 @@
+.marketplace-page {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 100%);
+    padding: 2rem 1rem;
+}
+
+.marketplace-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.marketplace-header h1 {
+    color: #fff;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.marketplace-header p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+}
+
+.marketplace-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+}
+
+/* Filters */
+.filters-sidebar {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+}
+
+.filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.filters-header h2 {
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.btn-clear {
+    background: none;
+    border: none;
+    color: #667eea;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-clear:hover {
+    text-decoration: underline;
+}
+
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+
+.filter-group label {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.filter-group input,
+.filter-group select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 0.5rem;
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* Content */
+.listings-content {
+    min-height: 400px;
+}
+
+.results-header {
+    margin-bottom: 1.5rem;
+}
+
+.results-header h3 {
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.listing-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.listing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.listing-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 5/7;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.listing-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.foil-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.listing-info {
+    padding: 1rem;
+}
+
+.listing-info h3 {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.listing-game {
+    color: #667eea;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+    text-transform: capitalize;
+}
+
+.listing-set {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.listing-details {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.listing-details span {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: capitalize;
+}
+
+.listing-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price {
+    color: #4ade80;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+.no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.no-results p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+}
+
+.loading {
+    text-align: center;
+    color: #fff;
+    padding: 4rem;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 1024px) {
+    .marketplace-container {
+        grid-template-columns: 1fr;
+    }
+
+    .filters-sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .listings-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .marketplace-header h1 {
+        font-size: 2rem;
+    }
+}

@@ -1,10 +1,14 @@
 import React from 'react';
-import { Search, User, Menu } from 'lucide-react';
+import { Search, Menu, LogIn } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import CartButton from './CartButton';
+import UserMenu from './UserMenu';
+import { useAuth } from '../contexts/AuthContext';
 import './Navbar.css';
 
 const Navbar = ({ onMenuClick }) => {
+    const { isAuthenticated, loading } = useAuth();
+
     return (
         <nav className="navbar">
             <div className="container navbar-content">
@@ -27,9 +31,16 @@ const Navbar = ({ onMenuClick }) => {
 
                 <div className="navbar-actions">
                     <ThemeToggle />
-                    <button className="btn btn-ghost icon-btn">
-                        <User size={20} />
-                    </button>
+                    {!loading && (
+                        isAuthenticated ? (
+                            <UserMenu />
+                        ) : (
+                            <a href="#/login" className="btn btn-ghost">
+                                <LogIn size={18} />
+                                <span className="auth-text">Entrar</span>
+                            </a>
+                        )
+                    )}
                     <CartButton />
                 </div>
             </div>

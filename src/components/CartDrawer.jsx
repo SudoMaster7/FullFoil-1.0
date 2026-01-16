@@ -77,7 +77,13 @@ const CartDrawer = () => {
                                     </div>
                                 </div>
 
-                                <button className="btn btn-primary btn-block">
+                                <button
+                                    className="btn btn-primary btn-block"
+                                    onClick={() => {
+                                        setIsCartOpen(false);
+                                        window.location.hash = '#/checkout';
+                                    }}
+                                >
                                     Finalizar Compra
                                 </button>
                             </div>

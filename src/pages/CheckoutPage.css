@@ -1,0 +1,106 @@
+.checkout-page {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 100%);
+    padding: 2rem 1rem;
+}
+
+.checkout-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.checkout-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.back-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-4px);
+}
+
+.checkout-header h1 {
+    font-size: 2rem;
+    color: #fff;
+    margin: 0;
+}
+
+.checkout-content {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+}
+
+.checkout-main {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.checkout-sidebar {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+.empty-cart-message {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.empty-cart-message h2 {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.empty-cart-message p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 1024px) {
+    .checkout-content {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-sidebar {
+        position: static;
+    }
+}

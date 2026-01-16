@@ -1,33 +1,18 @@
 import express from 'express';
+import pokemon from 'pokemontcgsdk';
 import { getCache, setCache, generateCacheKey } from '../utils/cache.js';
 
 const router = express.Router();
 
-// Mock data completo - PokemonTCG API está offline
-const pokemonMockCards = [
-    { id: 'sv1-1', name: 'Sprigatito', supertype: 'Pokémon', subtypes: ['Basic'], hp: '60', types: ['Grass'], rarity: 'Common', set: { id: 'sv1', name: 'Scarlet & Violet', series: 'Scarlet & Violet', releaseDate: '2023/03/31' }, images: { small: 'https://images.pokemontcg.io/sv1/1.png', large: 'https://images.pokemontcg.io/sv1/1_hires.png' }, cardmarket: { prices: { averageSellPrice: 0.50 } } },
-    { id: 'sv1-14', name: 'Meowscarada ex', supertype: 'Pokémon', subtypes: ['Stage 2', 'ex'], hp: '310', types: ['Grass'], rarity: 'Double Rare', set: { id: 'sv1', name: 'Scarlet & Violet', series: 'Scarlet & Violet', releaseDate: '2023/03/31' }, images: { small: 'https://images.pokemontcg.io/sv1/14.png', large: 'https://images.pokemontcg.io/sv1/14_hires.png' }, cardmarket: { prices: { averageSellPrice: 12.50 } } },
-    { id: 'sv1-25', name: 'Fuecoco', supertype: 'Pokémon', subtypes: ['Basic'], hp: '70', types: ['Fire'], rarity: 'Common', set: { id: 'sv1', name: 'Scarlet & Violet', series: 'Scarlet & Violet', releaseDate: '2023/03/31' }, images: { small: 'https://images.pokemontcg.io/sv1/25.png', large: 'https://images.pokemontcg.io/sv1/25_hires.png' }, cardmarket: { prices: { averageSellPrice: 0.75 } } },
-    { id: 'sv1-38', name: 'Skeledirge ex', supertype: 'Pokémon', subtypes: ['Stage 2', 'ex'], hp: '330', types: ['Fire'], rarity: 'Double Rare', set: { id: 'sv1', name: 'Scarlet & Violet', series: 'Scarlet & Violet', releaseDate: '2023/03/31' }, images: { small: 'https://images.pokemontcg.io/sv1/38.png', large: 'https://images.pokemontcg.io/sv1/38_hires.png' }, cardmarket: { prices: { averageSellPrice: 15.00 } } },
-    { id: 'sv1-52', name: 'Quaxly', supertype: 'Pokémon', subtypes: ['Basic'], hp: '60', types: ['Water'], rarity: 'Common', set: { id: 'sv1', name: 'Scarlet & Violet', series: 'Scarlet & Violet', releaseDate: '2023/03/31' }, images: { small: 'https://images.pokemontcg.io/sv1/52.png', large: 'https://images.pokemontcg.io/sv1/52_hires.png' }, cardmarket: { prices: { averageSellPrice: 0.60 } } },
-    { id: 'sv1-64', name: 'Quaquaval ex', supertype: 'Pokémon', subtypes: ['Stage 2', 'ex'], hp: '320', types: ['Water'], rarity: 'Double Rare', set: { id: 'sv1', name: 'Scarlet & Violet', series: 'Scarlet & Violet', releaseDate: '2023/03/31' }, images: { small: 'https://images.pokemontcg.io/sv1/64.png', large: 'https://images.pokemontcg.io/sv1/64_hires.png' }, cardmarket: { prices: { averageSellPrice: 10.00 } } },
-    { id: 'sv1-100', name: 'Pikachu', supertype: 'Pokémon', subtypes: ['Basic'], hp: '70', types: ['Lightning'], rarity: 'Common', set: { id: 'sv1', name: 'Scarlet & Violet', series: 'Scarlet & Violet', releaseDate: '2023/03/31' }, images: { small: 'https://images.pokemontcg.io/sv1/100.png', large: 'https://images.pokemontcg.io/sv1/100_hires.png' }, cardmarket: { prices: { averageSellPrice: 2.50 } } },
-    { id: 'sv1-125', name: 'Gardevoir ex', supertype: 'Pokémon', subtypes: ['Stage 2', 'ex'], hp: '310', types: ['Psychic'], rarity: 'Double Rare', set: { id: 'sv1', name: 'Scarlet & Violet', series: 'Scarlet & Violet', releaseDate: '2023/03/31' }, images: { small: 'https://images.pokemontcg.io/sv1/125.png', large: 'https://images.pokemontcg.io/sv1/125_hires.png' }, cardmarket: { prices: { averageSellPrice: 25.00 } } },
-    { id: 'sv2-6', name: 'Charizard ex', supertype: 'Pokémon', subtypes: ['Stage 2', 'ex'], hp: '330', types: ['Fire'], rarity: 'Double Rare', set: { id: 'sv2', name: 'Paldea Evolved', series: 'Scarlet & Violet', releaseDate: '2023/06/09' }, images: { small: 'https://images.pokemontcg.io/sv2/6.png', large: 'https://images.pokemontcg.io/sv2/6_hires.png' }, cardmarket: { prices: { averageSellPrice: 45.00 } } },
-    { id: 'sv3-172', name: 'Charizard ex', supertype: 'Pokémon', subtypes: ['Stage 2', 'ex', 'Tera'], hp: '340', types: ['Fire', 'Darkness'], rarity: 'Special Illustration Rare', set: { id: 'sv3', name: 'Obsidian Flames', series: 'Scarlet & Violet', releaseDate: '2023/08/11' }, images: { small: 'https://images.pokemontcg.io/sv3/172.png', large: 'https://images.pokemontcg.io/sv3/172_hires.png' }, cardmarket: { prices: { averageSellPrice: 150.00 } } },
-    { id: 'sv4-1', name: 'Squirtle', supertype: 'Pokémon', subtypes: ['Basic'], hp: '70', types: ['Water'], rarity: 'Common', set: { id: 'sv4', name: 'Paradox Rift', series: 'Scarlet & Violet', releaseDate: '2023/11/03' }, images: { small: 'https://images.pokemontcg.io/sv4/1.png', large: 'https://images.pokemontcg.io/sv4/1_hires.png' }, cardmarket: { prices: { averageSellPrice: 0.70 } } },
-    { id: 'sv4-50', name: 'Blastoise ex', supertype: 'Pokémon', subtypes: ['Stage 2', 'ex'], hp: '340', types: ['Water'], rarity: 'Double Rare', set: { id: 'sv4', name: 'Paradox Rift', series: 'Scarlet & Violet', releaseDate: '2023/11/03' }, images: { small: 'https://images.pokemontcg.io/sv4/50.png', large: 'https://images.pokemontcg.io/sv4/50_hires.png' }, cardmarket: { prices: { averageSellPrice: 18.00 } } },
-    { id: 'swsh1-55', name: 'Eevee', supertype: 'Pokémon', subtypes: ['Basic'], hp: '60', types: ['Colorless'], rarity: 'Common', set: { id: 'swsh1', name: 'Sword & Shield', series: 'Sword & Shield', releaseDate: '2020/02/07' }, images: { small: 'https://images.pokemontcg.io/swsh1/55.png', large: 'https://images.pokemontcg.io/swsh1/55_hires.png' }, cardmarket: { prices: { averageSellPrice: 1.50 } } },
-    { id: 'swsh9-94', name: 'Umbreon ex', supertype: 'Pokémon', subtypes: ['Stage 1', 'ex'], hp: '260', types: ['Darkness'], rarity: 'Double Rare', set: { id: 'swsh9', name: 'Brilliant Stars', series: 'Sword & Shield', releaseDate: '2022/02/25' }, images: { small: 'https://images.pokemontcg.io/swsh9/94.png', large: 'https://images.pokemontcg.io/swsh9/94_hires.png' }, cardmarket: { prices: { averageSellPrice: 22.00 } } },
-    { id: 'xy1-53', name: 'Mewtwo', supertype: 'Pokémon', subtypes: ['Basic'], hp: '130', types: ['Psychic'], rarity: 'Rare', set: { id: 'xy1', name: 'XY', series: 'XY', releaseDate: '2014/02/05' }, images: { small: 'https://images.pokemontcg.io/xy1/53.png', large: 'https://images.pokemontcg.io/xy1/53_hires.png' }, cardmarket: { prices: { averageSellPrice: 5.00 } } },
-    { id: 'base1-4', name: 'Charizard', supertype: 'Pokémon', subtypes: ['Stage 2'], hp: '120', types: ['Fire'], rarity: 'Rare Holo', set: { id: 'base1', name: 'Base Set', series: 'Base', releaseDate: '1999/01/09' }, images: { small: 'https://images.pokemontcg.io/base1/4.png', large: 'https://images.pokemontcg.io/base1/4_hires.png' }, cardmarket: { prices: { averageSellPrice: 350.00 } } },
-    { id: 'base1-25', name: 'Pikachu', supertype: 'Pokémon', subtypes: ['Basic'], hp: '40', types: ['Lightning'], rarity: 'Common', set: { id: 'base1', name: 'Base Set', series: 'Base', releaseDate: '1999/01/09' }, images: { small: 'https://images.pokemontcg.io/base1/25.png', large: 'https://images.pokemontcg.io/base1/25_hires.png' }, cardmarket: { prices: { averageSellPrice: 15.00 } } },
-    { id: 'base1-2', name: 'Blastoise', supertype: 'Pokémon', subtypes: ['Stage 2'], hp: '100', types: ['Water'], rarity: 'Rare Holo', set: { id: 'base1', name: 'Base Set', series: 'Base', releaseDate: '1999/01/09' }, images: { small: 'https://images.pokemontcg.io/base1/2.png', large: 'https://images.pokemontcg.io/base1/2_hires.png' }, cardmarket: { prices: { averageSellPrice: 120.00 } } },
-    { id: 'base1-15', name: 'Venusaur', supertype: 'Pokémon', subtypes: ['Stage 2'], hp: '100', types: ['Grass'], rarity: 'Rare Holo', set: { id: 'base1', name: 'Base Set', series: 'Base', releaseDate: '1999/01/09' }, images: { small: 'https://images.pokemontcg.io/base1/15.png', large: 'https://images.pokemontcg.io/base1/15_hires.png' }, cardmarket: { prices: { averageSellPrice: 95.00 } } },
-    { id: 'sv7-200', name: 'Rayquaza ex', supertype: 'Pokémon', subtypes: ['Basic', 'ex'], hp: '220', types: ['Dragon'], rarity: 'Hyper Rare', set: { id: 'sv7', name: 'Stellar Crown', series: 'Scarlet & Violet', releaseDate: '2024/09/13' }, images: { small: 'https://images.pokemontcg.io/sv7/200.png', large: 'https://images.pokemontcg.io/sv7/200_hires.png' }, cardmarket: { prices: { averageSellPrice: 120.00 } } }
-];
+// Configure SDK with API key if available
+if (process.env.POKEMON_TCG_API_KEY) {
+    pokemon.configure({ apiKey: process.env.POKEMON_TCG_API_KEY });
+}
 
-// GET /api/pokemon/cards
+/**
+ * GET /api/pokemon/cards
+ * Search Pokemon cards with filters
+ */
 router.get('/cards', async (req, res) => {
     try {
         const cacheKey = generateCacheKey('pokemon:cards', req.query);
@@ -36,20 +21,35 @@ router.get('/cards', async (req, res) => {
             return res.json(cached);
         }
 
-        console.log('Pokemon: Using mock data (API offline)');
+        const { page = 1, pageSize = 50, q } = req.query;
 
-        const data = {
-            data: pokemonMockCards,
-            page: 1,
-            pageSize: 20,
-            count: pokemonMockCards.length,
-            totalCount: pokemonMockCards.length
+        console.log(`Pokemon API: Fetching cards (page ${page}, size ${pageSize})`);
+
+        // Build query if provided
+        const queryParams = {
+            page: parseInt(page),
+            pageSize: parseInt(pageSize)
         };
 
-        setCache(cacheKey, data);
-        res.json(data);
+        if (q) {
+            queryParams.q = q;
+        }
+
+        // Use SDK to fetch cards
+        const result = await pokemon.card.all(queryParams);
+
+        const response = {
+            data: result.data || [],
+            page: result.page || 1,
+            pageSize: result.pageSize || pageSize,
+            count: result.count || 0,
+            totalCount: result.totalCount || 0
+        };
+
+        setCache(cacheKey, response, 300); // Cache for 5 minutes
+        res.json(response);
     } catch (error) {
-        console.error('Pokemon mock data error:', error.message);
+        console.error('Pokemon API error:', error.message);
         res.status(500).json({
             error: 'Failed to fetch Pokemon cards',
             message: error.message
@@ -57,21 +57,95 @@ router.get('/cards', async (req, res) => {
     }
 });
 
-// GET /api/pokemon/cards/random
+/**
+ * GET /api/pokemon/cards/random
+ * Get random Pokemon cards
+ */
 router.get('/cards/random', async (req, res) => {
     try {
-        const pageSize = parseInt(req.query.count) || 12;
-        const shuffled = [...pokemonMockCards].sort(() => 0.5 - Math.random());
-        const randomCards = shuffled.slice(0, pageSize);
+        const count = parseInt(req.query.count) || 12;
 
-        res.json({
-            data: randomCards,
-            count: randomCards.length
+        console.log(`Pokemon API: Fetching ${count} random cards`);
+
+        // Fetch recent sets to get random cards from
+        const randomPage = Math.floor(Math.random() * 10) + 1;
+        const result = await pokemon.card.all({
+            page: randomPage,
+            pageSize: count,
+            orderBy: '-set.releaseDate' // Get newer cards
         });
+
+        const response = {
+            data: result.data || [],
+            count: result.data?.length || 0
+        };
+
+        res.json(response);
     } catch (error) {
-        console.error('Pokemon random mock data error:', error.message);
+        console.error('Pokemon random API error:', error.message);
         res.status(500).json({
             error: 'Failed to fetch random Pokemon cards',
+            message: error.message
+        });
+    }
+});
+
+/**
+ * GET /api/pokemon/cards/:id
+ * Get a specific Pokemon card by ID
+ */
+router.get('/cards/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        console.log(`Pokemon API: Fetching card ${id}`);
+
+        const card = await pokemon.card.find(id);
+
+        if (!card) {
+            return res.status(404).json({
+                error: 'Card not found',
+                message: `No Pokemon card found with ID: ${id}`
+            });
+        }
+
+        res.json({ data: card });
+    } catch (error) {
+        console.error('Pokemon API error:', error.message);
+        res.status(500).json({
+            error: 'Failed to fetch Pokemon card',
+            message: error.message
+        });
+    }
+});
+
+/**
+ * GET /api/pokemon/sets
+ * Get all Pokemon sets
+ */
+router.get('/sets', async (req, res) => {
+    try {
+        const cacheKey = 'pokemon:sets';
+        const cached = getCache(cacheKey);
+        if (cached) {
+            return res.json(cached);
+        }
+
+        console.log('Pokemon API: Fetching sets');
+
+        const result = await pokemon.set.all();
+
+        const response = {
+            data: result.data || [],
+            count: result.data?.length || 0
+        };
+
+        setCache(cacheKey, response, 3600); // Cache for 1 hour
+        res.json(response);
+    } catch (error) {
+        console.error('Pokemon sets API error:', error.message);
+        res.status(500).json({
+            error: 'Failed to fetch Pokemon sets',
             message: error.message
         });
     }
