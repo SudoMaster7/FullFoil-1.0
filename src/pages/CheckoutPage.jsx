@@ -40,13 +40,19 @@ function CheckoutPage() {
     const handleCheckoutComplete = async (orderData) => {
         try {
             setProcessing(true);
-            const order = await addOrder(orderData);
+            const createdOrders = await addOrder(orderData);
 
             // Clear cart after successful order
             clearCart();
 
-            // Redirect to order confirmation
-            window.location.hash = `#/orders/${order.id}`;
+            // Redirect logic
+            if (createdOrders.length === 1) {
+                window.location.hash = `#/orders/${createdOrders[0].id}`;
+            } else {
+                // Multiple orders created (Split Orders)
+                window.location.hash = `#/profile/orders`;
+                // Ideally show a toast here, but hash change might clear it if not persistent
+            }
         } catch (error) {
             console.error('Order creation error:', error);
             alert('Erro ao criar pedido. Tente novamente.');

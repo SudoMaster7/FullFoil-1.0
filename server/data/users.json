@@ -1,8 +1,18 @@
 [
   {
+    "id": "user_admin_001",
+    "email": "admin@fullfoil.com",
+    "name": "Administrador",
+    "password": "$2b$10$3RJZhMAQ2PCNlIy/42aPUuJKPuDsgiSnviR3KLbYS4D0eM.2vC29u",
+    "role": "admin",
+    "createdAt": "2026-01-27T00:00:00.000Z",
+    "updatedAt": "2026-01-27T00:00:00.000Z"
+  },
+  {
     "id": "user_1768567314986_nupdezit4",
     "email": "moraesleonardobrito@gmail.com",
     "name": "LEONARDO BRITO",
+    "password": "$2b$10$3RJZhMAQ2PCNlIy/42aPUuJKPuDsgiSnviR3KLbYS4D0eM.2vC29u",
     "createdAt": "2026-01-16T12:41:54.986Z",
     "updatedAt": "2026-01-16T12:41:54.986Z"
   },
@@ -10,6 +20,7 @@
     "id": "user_1768567400570_g1c36wcto",
     "email": "test@example.com",
     "name": "Test User",
+    "password": "$2b$10$3RJZhMAQ2PCNlIy/42aPUuJKPuDsgiSnviR3KLbYS4D0eM.2vC29u",
     "createdAt": "2026-01-16T12:43:20.570Z",
     "updatedAt": "2026-01-16T12:43:20.570Z"
   },
@@ -17,6 +28,7 @@
     "id": "user_1768567721873_qyjm5i51p",
     "email": "newuser2@example.com",
     "name": "New User 2",
+    "password": "$2b$10$3RJZhMAQ2PCNlIy/42aPUuJKPuDsgiSnviR3KLbYS4D0eM.2vC29u",
     "createdAt": "2026-01-16T12:48:41.873Z",
     "updatedAt": "2026-01-16T12:48:41.873Z"
   },
@@ -24,7 +36,24 @@
     "id": "user_1768568099897_qh5exp5a2",
     "email": "leo@gmail.com",
     "name": "LEONARDO BRITO",
+    "password": "$2b$10$3RJZhMAQ2PCNlIy/42aPUuJKPuDsgiSnviR3KLbYS4D0eM.2vC29u",
     "createdAt": "2026-01-16T12:54:59.897Z",
     "updatedAt": "2026-01-16T12:54:59.897Z"
+  },
+  {
+    "id": "user_1769484948645_q8mc1xflw",
+    "email": "clinicadimango@gmail.com",
+    "name": "Sudo BritO",
+    "password": "$2b$10$3RJZhMAQ2PCNlIy/42aPUuJKPuDsgiSnviR3KLbYS4D0eM.2vC29u",
+    "createdAt": "2026-01-27T03:35:48.645Z",
+    "updatedAt": "2026-01-27T03:35:48.645Z"
+  },
+  {
+    "id": "user_1769485261287_1dzr1xdge",
+    "email": "fidelis@gmail.com",
+    "name": "fidelis",
+    "createdAt": "2026-01-27T03:41:01.287Z",
+    "updatedAt": "2026-01-27T03:41:01.287Z",
+    "password": "$2b$10$.1wOb3HyGUeexikhTvKNYedFAY3xyuQBCXb3X7dc1LLLmur0uXwly"
   }
 ]

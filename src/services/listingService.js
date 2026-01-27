@@ -1,12 +1,22 @@
-import API_BASE from '../config/api';
+/**
+ * Listing Service - FullFoil
+ * 
+ * Handles marketplace listings via Django catalog API.
+ */
 
-const LISTINGS_API = `${API_BASE}/listings`;
+import { API_URLS } from '../config/api';
+import authService from './authService';
+
+const LISTINGS_API = `${API_URLS.CATALOG}/listings`;
+const CARDS_API = `${API_URLS.CATALOG}/cards`;
 
 /**
  * Create a new listing
  */
-export async function createListing(listingData, token) {
-    const response = await fetch(LISTINGS_API, {
+export async function createListing(listingData) {
+    const token = authService.getToken();
+
+    const response = await fetch(`${LISTINGS_API}/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -18,67 +28,84 @@ export async function createListing(listingData, token) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || 'Erro ao criar listing');
+        throw new Error(data.detail || data.message || 'Erro ao criar listing');
     }
 
-    return data.listing;
+    return data;
 }
 
 /**
  * Get all listings with filters
  */
 export async function getAllListings(filters = {}) {
-    const params = new URLSearchParams(filters);
-    const url = params.toString() ? `${LISTINGS_API}?${params}` : LISTINGS_API;
+    const params = new URLSearchParams();
+
+    Object.keys(filters).forEach(key => {
+        if (filters[key] !== null && filters[key] !== undefined && filters[key] !== '') {
+            params.append(key, filters[key]);
+        }
+    });
+
+    const url = params.toString() ? `${LISTINGS_API}/?${params}` : `${LISTINGS_API}/`;
 
     const response = await fetch(url);
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar listings');
+        throw new Error(data.detail || 'Erro ao buscar listings');
     }
 
-    return data.listings;
+    // Handle DRF pagination response
+    return data.results || data;
 }
 
 /**
- * Search listings by card ID
+ * Search listings by card ID (uses canonical catalog)
  */
-export async function searchListingsByCard(cardId, filters = {}) {
-    const params = new URLSearchParams(filters);
+export async function searchListingsByCard(cardProductId, filters = {}) {
+    const params = new URLSearchParams();
+
+    Object.keys(filters).forEach(key => {
+        if (filters[key] !== null && filters[key] !== undefined && filters[key] !== '') {
+            params.append(key, filters[key]);
+        }
+    });
+
     const url = params.toString()
-        ? `${LISTINGS_API}/search/card/${cardId}?${params}`
-        : `${LISTINGS_API}/search/card/${cardId}`;
+        ? `${CARDS_API}/${cardProductId}/listings/?${params}`
+        : `${CARDS_API}/${cardProductId}/listings/`;
 
     const response = await fetch(url);
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar listings');
+        throw new Error(data.detail || 'Erro ao buscar listings');
     }
 
-    return data.listings;
+    return data.listings || data.results || data;
 }
 
 /**
  * Get listing by ID
  */
 export async function getListing(listingId) {
-    const response = await fetch(`${LISTINGS_API}/${listingId}`);
+    const response = await fetch(`${LISTINGS_API}/${listingId}/`);
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar listing');
+        throw new Error(data.detail || 'Erro ao buscar listing');
     }
 
-    return data.listing;
+    return data;
 }
 
 /**
  * Update listing
  */
-export async function updateListing(listingId, updates, token) {
-    const response = await fetch(`${LISTINGS_API}/${listingId}`, {
+export async function updateListing(listingId, updates) {
+    const token = authService.getToken();
+
+    const response = await fetch(`${LISTINGS_API}/${listingId}/`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -90,27 +117,28 @@ export async function updateListing(listingId, updates, token) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || 'Erro ao atualizar listing');
+        throw new Error(data.detail || 'Erro ao atualizar listing');
     }
 
-    return data.listing;
+    return data;
 }
 
 /**
  * Delete listing
  */
-export async function deleteListing(listingId, token) {
-    const response = await fetch(`${LISTINGS_API}/${listingId}`, {
+export async function deleteListing(listingId) {
+    const token = authService.getToken();
+
+    const response = await fetch(`${LISTINGS_API}/${listingId}/`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${token}`
         }
     });
 
-    const data = await response.json();
-
     if (!response.ok) {
-        throw new Error(data.message || 'Erro ao deletar listing');
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.detail || 'Erro ao deletar listing');
     }
 
     return true;

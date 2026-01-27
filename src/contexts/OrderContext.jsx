@@ -41,10 +41,11 @@ export function OrderProvider({ children }) {
 
         try {
             const response = await createOrder(orderData);
-            const newOrder = response.order;
+            // Response is now a list of orders (Split Orders)
+            const newOrders = Array.isArray(response) ? response : [response];
 
-            setOrders(prev => [newOrder, ...prev]);
-            return newOrder;
+            setOrders(prev => [...newOrders, ...prev]);
+            return newOrders;
         } catch (err) {
             setError(err.message);
             throw err;
@@ -59,7 +60,7 @@ export function OrderProvider({ children }) {
 
         try {
             const response = await getAllOrders();
-            setOrders(response.orders);
+            setOrders(response.orders || []);
         } catch (err) {
             setError(err.message);
             console.error('Error refreshing orders:', err);

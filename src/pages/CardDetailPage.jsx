@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, ShoppingCart, TrendingUp, TrendingDown } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, TrendingUp, TrendingDown, Bell } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
+import { getCardProduct, getCardHistory } from '../services/catalogService';
 import CardViewer3D from '../components/CardViewer3D';
-import PriceChart from '../components/PriceChart';
+import PriceHistoryChart from '../components/PriceHistoryChart';
 import CardInfo from '../components/CardInfo';
 import MarketplaceListings from '../components/MarketplaceListings';
+import PriceAlertModal from '../components/PriceAlertModal';
 import './CardDetailPage.css';
 
 const CardDetailPage = () => {
@@ -19,114 +21,44 @@ const CardDetailPage = () => {
 
     const { addToCart } = useCart();
     const [card, setCard] = useState(null);
+    const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedPeriod, setSelectedPeriod] = useState('30d');
+    const [showAlertModal, setShowAlertModal] = useState(false);
 
     useEffect(() => {
-        // Try to get card from sessionStorage first
-        const storedCard = sessionStorage.getItem('currentCard');
-
-        if (storedCard) {
+        const loadData = async () => {
+            setLoading(true);
             try {
-                const cardData = JSON.parse(storedCard);
+                // Fetch in parallel
+                const [cardData, historyResponse] = await Promise.all([
+                    getCardProduct(cardId),
+                    getCardHistory(cardId).catch(err => {
+                        console.warn("Failed to load history", err);
+                        return []; // Graceful fail
+                    })
+                ]);
 
-                // Enhance card data with price history
-                const enhancedCard = {
-                    ...cardData,
-                    imageHires: cardData.image,
-                    description: cardData.type || 'Carta de colecionador',
-                    flavorText: '',
-                    artist: 'Artista Desconhecido',
-                    setCode: cardData.set?.substring(0, 3).toUpperCase() || 'XXX',
-                    number: cardData.id?.split('-')[1] || '001',
-                    prices: {
-                        current: cardData.price || 0,
-                        min: (cardData.price || 0) * 0.85,
-                        avg: (cardData.price || 0) * 0.95,
-                        max: (cardData.price || 0) * 1.15,
-                        trend: (Math.random() - 0.5) * 10,
-                        history: generatePriceHistory(selectedPeriod, cardData.price || 100)
-                    },
-                    legality: {
-                        standard: Math.random() > 0.5 ? 'legal' : 'not_legal',
-                        modern: 'legal',
-                        legacy: 'legal',
-                        vintage: 'legal',
-                        commander: 'legal'
-                    }
-                };
-
-                setCard(enhancedCard);
-                setLoading(false);
-                return;
+                setCard(cardData);
+                // historyResponse might be array or { results: ... } depending on Django
+                // My serializer returns List directly.
+                setHistory(Array.isArray(historyResponse) ? historyResponse : []);
             } catch (error) {
-                console.error('Error parsing stored card:', error);
-            }
-        }
-
-        // Fallback to mock data if no stored card
-        const mockCard = {
-            id: cardId,
-            name: 'Carta Exemplo',
-            set: 'Set Exemplo',
-            setCode: 'EXM',
-            number: '001',
-            rarity: 'Rare',
-            type: 'Carta',
-            artist: 'Artista Desconhecido',
-            image: 'https://images.pokemontcg.io/base1/4_hires.png',
-            imageHires: 'https://images.pokemontcg.io/base1/4_hires.png',
-            description: 'Descrição da carta não disponível.',
-            flavorText: '',
-            game: game,
-            condition: 'NM',
-            prices: {
-                current: 100.00,
-                min: 85.00,
-                avg: 95.00,
-                max: 115.00,
-                trend: 2.5,
-                history: generatePriceHistory(selectedPeriod, 100)
-            },
-            legality: {
-                standard: 'legal',
-                modern: 'legal',
-                legacy: 'legal',
-                vintage: 'legal',
-                commander: 'legal'
+                console.error("Failed to load card details", error);
+            } finally {
+                setLoading(false);
             }
         };
 
-        setTimeout(() => {
-            setCard(mockCard);
-            setLoading(false);
-        }, 500);
-    }, [cardId, game, selectedPeriod]);
-
-    const generatePriceHistory = (period, basePrice = 100) => {
-        const days = period === '30d' ? 30 : period === '90d' ? 90 : 365;
-        const history = [];
-
-        for (let i = days; i >= 0; i--) {
-            const date = new Date();
-            date.setDate(date.getDate() - i);
-            const variance = (Math.random() - 0.5) * (basePrice * 0.1);
-            const price = basePrice + variance + ((days - i) * (basePrice * 0.002));
-
-            history.push({
-                date: date.toLocaleDateString('pt-BR'),
-                price: parseFloat(price.toFixed(2))
-            });
+        if (cardId) {
+            loadData();
         }
-
-        return history;
-    };
+    }, [cardId]);
 
     const handleAddToCart = () => {
         if (card) {
             addToCart({
                 ...card,
-                price: card.prices.current
+                price: parseFloat(card.market_price) || parseFloat(card.low_price) || 0
             });
         }
     };
@@ -151,6 +83,10 @@ const CardDetailPage = () => {
         );
     }
 
+    const currentPrice = parseFloat(card.market_price) || 0;
+    const lowPrice = parseFloat(card.low_price) || 0;
+    const highPrice = parseFloat(card.high_price) || 0;
+
     return (
         <div className="card-detail-page">
             <div className="container">
@@ -161,9 +97,9 @@ const CardDetailPage = () => {
                         Voltar
                     </button>
                     <span className="breadcrumb-separator">/</span>
-                    <span>{game.toUpperCase()}</span>
+                    <span>{card.game ? card.game.toUpperCase() : 'TCG'}</span>
                     <span className="breadcrumb-separator">/</span>
-                    <span>{card.set}</span>
+                    <span>{card.set_name || card.card_set?.name}</span>
                     <span className="breadcrumb-separator">/</span>
                     <span className="breadcrumb-current">{card.name}</span>
                 </div>
@@ -172,7 +108,7 @@ const CardDetailPage = () => {
                 <div className="card-detail-grid">
                     {/* Left Column - Card Viewer */}
                     <div className="card-viewer-section">
-                        <CardViewer3D card={card} />
+                        <CardViewer3D card={{ ...card, image: card.image_url }} />
 
                         <div className="quick-actions">
                             <button
@@ -180,7 +116,15 @@ const CardDetailPage = () => {
                                 onClick={handleAddToCart}
                             >
                                 <ShoppingCart size={20} />
-                                Adicionar ao Carrinho - R$ {card.prices.current.toFixed(2)}
+                                Adicionar ao Carrinho - R$ {currentPrice.toFixed(2)}
+                            </button>
+                            <button
+                                className="btn btn-outline btn-block"
+                                onClick={() => setShowAlertModal(true)}
+                                style={{ marginTop: '0.5rem' }}
+                            >
+                                <Bell size={20} />
+                                Criar Alerta de Preço
                             </button>
                         </div>
                     </div>
@@ -191,9 +135,9 @@ const CardDetailPage = () => {
                             <div>
                                 <h1 className="card-title">{card.name}</h1>
                                 <div className="card-meta">
-                                    <span className="card-set">{card.set}</span>
+                                    <span className="card-set">{card.set_name || card.card_set?.name}</span>
                                     <span className="card-number">#{card.number}</span>
-                                    <span className={`card-rarity ${card.rarity.toLowerCase()}`}>
+                                    <span className={`card-rarity ${card.rarity?.toLowerCase()}`}>
                                         {card.rarity}
                                     </span>
                                 </div>
@@ -203,26 +147,22 @@ const CardDetailPage = () => {
                         {/* Price Stats */}
                         <div className="price-stats-grid">
                             <div className="price-stat-card">
-                                <div className="stat-label">Preço Atual</div>
+                                <div className="stat-label">Preço de Mercado</div>
                                 <div className="stat-value primary">
-                                    R$ {card.prices.current.toFixed(2)}
+                                    R$ {currentPrice.toFixed(2)}
                                 </div>
-                                <div className={`stat-trend ${card.prices.trend >= 0 ? 'positive' : 'negative'}`}>
-                                    {card.prices.trend >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
-                                    {Math.abs(card.prices.trend)}% (30d)
+                                <div className="stat-trend neutral">
+                                    <TrendingUp size={16} />
+                                    Baseado em vendas recentes
                                 </div>
                             </div>
                             <div className="price-stat-card">
                                 <div className="stat-label">Mínimo</div>
-                                <div className="stat-value">R$ {card.prices.min.toFixed(2)}</div>
-                            </div>
-                            <div className="price-stat-card">
-                                <div className="stat-label">Média</div>
-                                <div className="stat-value">R$ {card.prices.avg.toFixed(2)}</div>
+                                <div className="stat-value">R$ {lowPrice.toFixed(2)}</div>
                             </div>
                             <div className="price-stat-card">
                                 <div className="stat-label">Máximo</div>
-                                <div className="stat-value">R$ {card.prices.max.toFixed(2)}</div>
+                                <div className="stat-value">R$ {highPrice.toFixed(2)}</div>
                             </div>
                         </div>
 
@@ -235,36 +175,23 @@ const CardDetailPage = () => {
                 <div className="price-chart-section">
                     <div className="section-header">
                         <h2>Histórico de Preços</h2>
-                        <div className="period-selector">
-                            <button
-                                className={`period-btn ${selectedPeriod === '30d' ? 'active' : ''}`}
-                                onClick={() => setSelectedPeriod('30d')}
-                            >
-                                30 Dias
-                            </button>
-                            <button
-                                className={`period-btn ${selectedPeriod === '90d' ? 'active' : ''}`}
-                                onClick={() => setSelectedPeriod('90d')}
-                            >
-                                90 Dias
-                            </button>
-                            <button
-                                className={`period-btn ${selectedPeriod === '1y' ? 'active' : ''}`}
-                                onClick={() => setSelectedPeriod('1y')}
-                            >
-                                1 Ano
-                            </button>
-                        </div>
                     </div>
-                    <PriceChart data={card.prices.history} />
+                    <PriceHistoryChart data={history} />
                 </div>
 
                 {/* Marketplace Listings */}
                 <div className="marketplace-section">
                     <h2>Anúncios Disponíveis</h2>
-                    <MarketplaceListings cardId={card.id} currentPrice={card.prices.current} />
+                    <MarketplaceListings cardId={card.id} currentPrice={currentPrice} />
                 </div>
             </div>
+
+            {showAlertModal && (
+                <PriceAlertModal
+                    product={card}
+                    onClose={() => setShowAlertModal(false)}
+                />
+            )}
         </div>
     );
 };

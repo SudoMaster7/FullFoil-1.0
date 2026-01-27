@@ -21,6 +21,15 @@ import { OrderProvider } from './contexts/OrderContext'
 import { AuthProvider } from './contexts/AuthContext'
 import CreateListingPage from './pages/CreateListingPage'
 import MarketplacePage from './pages/MarketplacePage'
+// Seller Dashboard Pages
+import SellerDashboardPage from './pages/SellerDashboardPage'
+import SellerOrdersPage from './pages/seller/SellerOrdersPage'
+import SellerInventoryPage from './pages/seller/SellerInventoryPage'
+import ProfileOverview from './pages/profile/ProfileOverview'
+import AddressBook from './pages/profile/AddressBook'
+import AccountSettings from './pages/profile/AccountSettings'
+import DeckListPage from './pages/DeckListPage'
+import DeckBuilderPage from './pages/DeckBuilderPage'
 import './App.css'
 
 function App() {
@@ -80,6 +89,50 @@ function App() {
         return;
       }
 
+      // Seller Dashboard Routes
+      if (hash === '/seller/dashboard') {
+        setCurrentRoute('seller-dashboard');
+        setActiveGame(null);
+        setCardId(null);
+        return;
+      }
+
+      if (hash === '/seller/orders') {
+        setCurrentRoute('seller-orders');
+        setActiveGame(null);
+        setCardId(null);
+        return;
+      }
+
+      if (hash === '/seller/inventory') {
+        setCurrentRoute('seller-inventory');
+        setActiveGame(null);
+        setCardId(null);
+        return;
+      }
+
+      // Profile Routes
+      if (hash === '/profile') {
+        setCurrentRoute('profile-overview');
+        setActiveGame(null);
+        setCardId(null);
+        return;
+      }
+
+      if (hash === '/profile/addresses') {
+        setCurrentRoute('profile-addresses');
+        setActiveGame(null);
+        setCardId(null);
+        return;
+      }
+
+      if (hash === '/profile/settings') {
+        setCurrentRoute('profile-settings');
+        setActiveGame(null);
+        setCardId(null);
+        return;
+      }
+
       // Check for checkout route
       if (hash === '/checkout') {
         setCurrentRoute('checkout');
@@ -93,6 +146,22 @@ function App() {
         setCurrentRoute('orders');
         setActiveGame(null);
         setCardId(null);
+        return;
+      }
+
+      // Check for deck routes
+      if (hash === '/decks') {
+        setCurrentRoute('my-decks');
+        setActiveGame(null);
+        setCardId(null);
+        return;
+      }
+
+      const builderMatch = hash.match(/^\/builder\/([^/]+)$/);
+      if (builderMatch) {
+        setCurrentRoute('deck-builder');
+        setActiveGame(null);
+        setCardId(builderMatch[1]); // Using shared state for ID
         return;
       }
 
@@ -198,6 +267,38 @@ function App() {
               ) : currentRoute === 'marketplace' ? (
                 <main>
                   <MarketplacePage />
+                </main>
+              ) : currentRoute === 'seller-dashboard' ? (
+                <main>
+                  <SellerDashboardPage />
+                </main>
+              ) : currentRoute === 'seller-orders' ? (
+                <main>
+                  <SellerOrdersPage />
+                </main>
+              ) : currentRoute === 'seller-inventory' ? (
+                <main>
+                  <SellerInventoryPage />
+                </main>
+              ) : currentRoute === 'profile-overview' ? (
+                <main>
+                  <ProfileOverview />
+                </main>
+              ) : currentRoute === 'profile-addresses' ? (
+                <main>
+                  <AddressBook />
+                </main>
+              ) : currentRoute === 'profile-settings' ? (
+                <main>
+                  <AccountSettings />
+                </main>
+              ) : currentRoute === 'my-decks' ? (
+                <main>
+                  <DeckListPage />
+                </main>
+              ) : currentRoute === 'deck-builder' && cardId ? (
+                <main>
+                  <DeckBuilderPage />
                 </main>
               ) : (
                 <main>

@@ -1,109 +1,131 @@
-import API_BASE from '../config/api.js';
-
-const ORDERS_API = `${API_BASE}/orders`;
-const PAYMENT_API = `${API_BASE}/payment`;
-
 /**
- * Create a payment intent
+ * Order Service - FullFoil
+ * 
+ * Handles orders via Django catalog API.
+ * Note: Stripe integration will be added separately.
  */
-export async function createPaymentIntent(amount, currency = 'brl') {
-    const response = await fetch(`${PAYMENT_API}/create-intent`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ amount, currency })
-    });
 
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to create payment intent');
-    }
+import { API_URLS } from '../config/api.js';
+import authService from './authService.js';
 
-    return response.json();
-}
-
-/**
- * Get payment intent status
- */
-export async function getPaymentStatus(paymentIntentId) {
-    const response = await fetch(`${PAYMENT_API}/status/${paymentIntentId}`);
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to get payment status');
-    }
-
-    return response.json();
-}
+const ORDERS_API = `${API_URLS.CATALOG}/orders`;
 
 /**
  * Create a new order
  */
 export async function createOrder(orderData) {
-    const response = await fetch(ORDERS_API, {
+    const token = authService.getToken();
+
+    const response = await fetch(`${ORDERS_API}/`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(orderData)
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to create order');
+        throw new Error(data.detail || data.error || 'Failed to create order');
     }
 
-    return response.json();
+    return data;
 }
 
 /**
  * Get order by ID
  */
 export async function getOrder(orderId) {
-    const response = await fetch(`${ORDERS_API}/${orderId}`);
+    const token = authService.getToken();
+
+    const response = await fetch(`${ORDERS_API}/${orderId}/`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    const data = await response.json();
 
     if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to get order');
+        throw new Error(data.detail || 'Failed to get order');
     }
 
-    return response.json();
+    return data;
 }
 
 /**
- * Get all orders (optionally filtered by userId)
+ * Get all orders for current user
  */
-export async function getAllOrders(userId = null) {
-    const url = userId ? `${ORDERS_API}?userId=${userId}` : ORDERS_API;
-    const response = await fetch(url);
+export async function getAllOrders() {
+    const token = authService.getToken();
+
+    const response = await fetch(`${ORDERS_API}/`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    const data = await response.json();
 
     if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to get orders');
+        throw new Error(data.detail || 'Failed to get orders');
     }
 
-    return response.json();
+    // Handle DRF pagination
+    return data.results || data;
 }
 
 /**
- * Update order status
+ * Update order status (admin/seller only)
  */
 export async function updateOrderStatus(orderId, status) {
-    const response = await fetch(`${ORDERS_API}/${orderId}/status`, {
-        method: 'PUT',
+    const token = authService.getToken();
+
+    const response = await fetch(`${ORDERS_API}/${orderId}/`, {
+        method: 'PATCH',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ status })
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to update order status');
+        throw new Error(data.detail || 'Failed to update order status');
     }
 
-    return response.json();
+    return data;
+}
+
+/**
+ * Create a payment intent (Stripe)
+ * Note: Stripe integration needs to be configured in Django
+ */
+export async function createPaymentIntent(amount, currency = 'brl') {
+    // This would connect to a Stripe endpoint in Django
+    // For now, return mock data for development
+    console.warn('Stripe payment intent - Django integration pending');
+
+    return {
+        clientSecret: 'mock_client_secret',
+        paymentIntentId: 'mock_pi_' + Date.now()
+    };
+}
+
+/**
+ * Get payment intent status
+ */
+export async function getPaymentStatus(paymentIntentId) {
+    // Stripe integration pending
+    console.warn('Stripe payment status - Django integration pending');
+
+    return {
+        status: 'succeeded'
+    };
 }
 
 export default {

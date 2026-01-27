@@ -34,7 +34,7 @@ function RegisterPage() {
         setLoading(true);
 
         try {
-            await register(email, password, name);
+            await register({ email, password, name });
             window.location.hash = '#/';
         } catch (err) {
             // Error is shown via toast in AuthContext

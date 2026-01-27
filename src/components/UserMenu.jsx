@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { User, LogOut, Package } from 'lucide-react';
+import { User, LogOut, Package, BookOpen } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import './UserMenu.css';
 
@@ -22,13 +22,16 @@ function UserMenu() {
     if (!user) return null;
 
     const getInitials = (name) => {
-        return name
+        const displayName = name || user.username || user.email || '?';
+        return displayName
             .split(' ')
             .map(n => n[0])
             .join('')
             .toUpperCase()
             .slice(0, 2);
     };
+
+    const displayName = user.name || user.username || user.email.split('@')[0];
 
     return (
         <div className="user-menu" ref={menuRef}>
@@ -40,7 +43,7 @@ function UserMenu() {
                 <div className="user-avatar">
                     {getInitials(user.name)}
                 </div>
-                <span className="user-name">{user.name.split(' ')[0]}</span>
+                <span className="user-name">{displayName.split(' ')[0]}</span>
             </button>
 
             {isOpen && (
@@ -50,7 +53,7 @@ function UserMenu() {
                             {getInitials(user.name)}
                         </div>
                         <div className="user-info">
-                            <div className="user-full-name">{user.name}</div>
+                            <div className="user-full-name">{displayName}</div>
                             <div className="user-email">{user.email}</div>
                         </div>
                     </div>
@@ -58,6 +61,15 @@ function UserMenu() {
                     <div className="user-menu-divider"></div>
 
                     <div className="user-menu-items">
+                        <a
+                            href="#/decks"
+                            className="user-menu-item"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <BookOpen size={18} />
+                            <span>Meus Decks</span>
+                        </a>
+
                         <a
                             href="#/orders"
                             className="user-menu-item"

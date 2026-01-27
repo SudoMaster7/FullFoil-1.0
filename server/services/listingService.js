@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Listing from '../models/Listing.js';
+import { getOrCreateCardProduct, updateListingCount } from './cardProductService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -145,14 +146,17 @@ export async function getAllListings(filters = {}) {
 }
 
 /**
- * Search listings by card
+ * Search listings by card (supports both cardProductId and legacy cardId)
  */
 export async function searchListingsByCard(cardId, filters = {}) {
     try {
         let listings = await loadListings();
 
-        // Filter by cardId
-        listings = listings.filter(l => l.cardId === cardId && l.status === 'active');
+        // Filter by cardProductId (canonical) or cardId (legacy)
+        listings = listings.filter(l =>
+            (l.cardProductId === cardId || l.cardId === cardId) &&
+            l.status === 'active'
+        );
 
         // Apply additional filters
         if (filters.condition) {
@@ -161,9 +165,24 @@ export async function searchListingsByCard(cardId, filters = {}) {
         if (filters.foil !== undefined) {
             listings = listings.filter(l => l.foil === (filters.foil === 'true' || filters.foil === true));
         }
+        if (filters.language) {
+            listings = listings.filter(l => l.language === filters.language);
+        }
 
         // Sort by price (lowest first by default)
-        listings.sort((a, b) => a.price - b.price);
+        const sortBy = filters.sortBy || 'price';
+        const sortOrder = filters.sortOrder || 'asc';
+
+        listings.sort((a, b) => {
+            let comparison = 0;
+            if (sortBy === 'price') {
+                comparison = a.price - b.price;
+            } else if (sortBy === 'condition') {
+                const condOrder = ['near_mint', 'lightly_played', 'moderately_played', 'heavily_played', 'damaged'];
+                comparison = condOrder.indexOf(a.condition) - condOrder.indexOf(b.condition);
+            }
+            return sortOrder === 'asc' ? comparison : -comparison;
+        });
 
         return listings;
     } catch (error) {

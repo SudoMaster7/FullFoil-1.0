@@ -14,6 +14,8 @@ import ordersRoutes from './routes/orders.js';
 import authRoutes from './routes/auth.js';
 import sellersRoutes from './routes/sellers.js';
 import listingsRoutes from './routes/listings.js';
+import cardsRoutes from './routes/cards.js';
+import cartRoutes from './routes/cart.js';
 
 dotenv.config();
 
@@ -57,6 +59,8 @@ app.use('/api/orders', ordersRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/sellers', sellersRoutes);
 app.use('/api/listings', listingsRoutes);
+app.use('/api/cards', cardsRoutes);
+app.use('/api/cart', cartRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {

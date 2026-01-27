@@ -23,7 +23,7 @@ function OrdersPage() {
                 setLoading(true);
                 try {
                     const response = await getAllOrders(user.id);
-                    setOrders(response.orders);
+                    setOrders(response.orders || []);
                 } catch (error) {
                     console.error('Error loading orders:', error);
                 } finally {
@@ -76,7 +76,7 @@ function OrdersPage() {
                     <p>Acompanhe todos os seus pedidos</p>
                 </div>
 
-                {orders.length === 0 ? (
+                {(orders || []).length === 0 ? (
                     <div className="no-orders">
                         <div className="no-orders-icon">🛒</div>
                         <h2>Você ainda não fez nenhum pedido</h2>
@@ -87,7 +87,7 @@ function OrdersPage() {
                     </div>
                 ) : (
                     <div className="orders-list">
-                        {orders.map((order) => (
+                        {(orders || []).map((order) => (
                             <div
                                 key={order.id}
                                 className="order-card"

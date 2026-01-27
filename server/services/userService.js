@@ -49,7 +49,13 @@ export async function createUser({ email, password, name }) {
         const user = new User({ email, name, password: 'temp' });
         await user.setPassword(password);
 
-        users.push(user);
+        // Save user data WITH password hash
+        const userDataToSave = {
+            ...user.toJSON(),
+            password: user.password  // Include hashed password
+        };
+
+        users.push(userDataToSave);
         await saveUsers(users);
 
         console.log(`✅ User created: ${user.email}`);
